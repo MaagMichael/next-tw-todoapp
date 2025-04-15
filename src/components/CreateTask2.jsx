@@ -1,37 +1,37 @@
-'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
-export default function CreateTask() {
-  const [taskname, setTaskname] = useState('');
-  const router = useRouter();
+export default function CreateTask2() {
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  //  form action with a server function
+  async function CreateTasks(formData) {
+    "use server";
+
+    const taskname = formData.get("taskname");
+
     try {
-      const response = await fetch('/api/tasks', {
+      const response = await fetch('http://localhost:3000/api/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ taskname }),
-      });
+        cache: "no-store",
+      })
 
       if (response.ok) {
-        setTaskname('');
-        router.refresh();
+        // Refresh the page or update the UI
+        window.location.reload();
       }
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error('Error adding task:', error)
     }
-  };
+  }
 
   return (
     <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-full max-w-lg">
       <div className="bg-white rounded-lg shadow-md p-4">
         <h2 className="text-lg font-semibold mb-2">New Todo:</h2>
-        <form onSubmit={handleSubmit} className="flex justify-between">
+
+        <form action={CreateTasks} className="flex justify-between">
           <input
             type="text"
             id="taskname"
@@ -39,8 +39,6 @@ export default function CreateTask() {
             placeholder="write here"
             maxLength="50"
             required
-            value={taskname}
-            onChange={(e) => setTaskname(e.target.value)}
             className="w-4/5 border border-gray-300 rounded-md px-3 py-2"
           />
           <button

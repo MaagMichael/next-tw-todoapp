@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 
-import { EditTasks } from "@/actions/actions";
-
 export default function EditButton(item) {
   const [isopen, setIsOpen] = useState(false);
 

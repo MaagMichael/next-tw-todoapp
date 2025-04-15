@@ -1,9 +1,5 @@
 "use client";
 
-import { DeleteTasks } from "@/actions/actions";
-import { ToggleTasks } from "@/actions/actions";
-
-
 import { useState } from "react";
 import EditButton from "./EditButton";
 
@@ -13,6 +9,25 @@ export default function BoxTask(item) {
   const handleCheckboxChange = async () => {
     setIsChecked(!isChecked);
     await ToggleTasks(item.id);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`/api/tasks`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (response.ok) {
+        // Refresh the page or update the UI
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   return (
@@ -31,7 +46,7 @@ export default function BoxTask(item) {
 
       <div>
         <EditButton {...item} />
-        <button className="" onClick={() => DeleteTasks(item.id)}>
+        <button className="" onClick={() => handleDelete(item.id)}>
           🗑️
         </button>
       </div>

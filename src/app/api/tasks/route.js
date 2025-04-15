@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
+const filePath = path.join(process.cwd(), "src", "data", "task.json");
 import { revalidatePath } from "next/cache";
 
 // ############################################### GET ###############################################
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), "src", "data", "task.json");
     const fileData = await fs.readFile(filePath, "utf8");
     const { tasks: existingTasks } = JSON.parse(fileData);
     
@@ -24,7 +24,6 @@ export async function GET() {
 // ############################################### POST ###############################################
 export async function POST(request) {
   try {
-    const filePath = path.join(process.cwd(), "src", "data", "task.json");
     const fileData = await fs.readFile(filePath, "utf8");
     const { tasks: existingTasks } = JSON.parse(fileData);
 
@@ -73,7 +72,6 @@ export async function POST(request) {
 
 export async function DELETE(request) {
   try {
-    const filePath = path.join(process.cwd(), "src", "data", "task.json");
     const fileData = await fs.readFile(filePath, "utf8");
     const { tasks: existingTasks } = JSON.parse(fileData);
 
@@ -111,7 +109,6 @@ export async function DELETE(request) {
 
 export async function PATCH(request) {
   try {
-    const filePath = path.join(process.cwd(), "src", "data", "task.json");
     const fileData = await fs.readFile(filePath, "utf8");
     const { tasks: existingTasks } = JSON.parse(fileData);
 
@@ -124,6 +121,7 @@ export async function PATCH(request) {
         return {
           ...task,
           taskname: updatedtaskinput.taskname,
+          status: updatedtaskinput.status,
           datelastedit: new Date().toISOString(),
         };
       }

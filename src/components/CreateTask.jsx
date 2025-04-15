@@ -1,9 +1,30 @@
-import { CreateTasks } from "@/actions/actions";
+'use client'
+
 
 export default function CreateTask() {
 
-    // via API Router - tbd
-  // test via URL http://localhost:3000/api/tasks?newtask");
+  async function handleSubmit(event) {
+    event.preventDefault()
+    
+    const taskname = event.target.taskname.value
+
+    try {
+      const response = await fetch('http://localhost:3000/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskname }),
+      })
+
+      if (response.ok) {
+        // Refresh the page or update the UI
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error adding task:', error)
+    }
+  }
 
   return (
     <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-full max-w-lg">
@@ -11,7 +32,7 @@ export default function CreateTask() {
 
         <h2 className="text-lg font-semibold mb-2">New Todo:</h2>
         
-          <form action={CreateTasks} className="flex justify-between">
+          <form onSubmit={handleSubmit} className="flex justify-between">
             <input
               type="text"
               id="taskname"
