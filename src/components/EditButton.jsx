@@ -3,7 +3,6 @@ import { useState } from "react";
 
 export default function EditButton(item) {
   const [isopen, setIsOpen] = useState(false);
-
   const [itemName, setItemName] = useState(item.taskname);
 
   const handleClick = () => {
@@ -11,6 +10,35 @@ export default function EditButton(item) {
     setItemName(item.taskname);
     // close modal
     setIsOpen(!isopen);
+  };
+
+  const EditTasks = async (event) => {
+    event.preventDefault();
+
+    const data = {
+      id: item.id,  // Get id directly from item props
+      taskname: itemName, // useState value
+      status: item.status,
+      datelastedit: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch(`/api/tasks`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
   };
 
   return (
@@ -25,18 +53,7 @@ export default function EditButton(item) {
       {isopen && (
         <div className="fixed inset-0 bg-slate-500/60 flex items-center justify-center z-10">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 relative">
-            <form
-              action={async (formData) => {
-                // object to send to EditTasks function
-                const data = {
-                  id: item.id,
-                  taskname: formData.get("taskname"),
-                };
-                await EditTasks(data);
-                setIsOpen(false);
-              }}
-              className="p-6 space-y-4"
-            >
+            <form onSubmit={EditTasks} className="p-6 space-y-4">
               <div className="flex flex-col">
                 <label
                   htmlFor="taskname"

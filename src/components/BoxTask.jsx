@@ -5,18 +5,42 @@ import EditButton from "./EditButton";
 
 export default function BoxTask(item) {
   const [isChecked, setIsChecked] = useState(item.status);
-
+  
   const handleCheckboxChange = async () => {
     setIsChecked(!isChecked);
-    await ToggleTasks(item.id);
+    
+    const data = {
+      id: item.id, // Get id directly from item props
+      taskname: item.taskname, // useState value
+      status: isChecked,
+      datelastedit: new Date().toISOString(),
+    };    
+
+    try {
+      const response = await fetch(`/api/tasks`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`/api/tasks`, {
-        method: 'DELETE',
+      const response = await fetch("/api/tasks", {
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ id }),
       });
@@ -26,7 +50,7 @@ export default function BoxTask(item) {
         window.location.reload();
       }
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.error("Error deleting task:", error);
     }
   };
 
@@ -37,7 +61,7 @@ export default function BoxTask(item) {
           onChange={handleCheckboxChange}
           type="checkbox"
           className="mr-4"
-          checked={isChecked}
+          value={isChecked}
         />
         <h2 className={`${isChecked ? "line-through" : ""}`}>
           {item.taskname}

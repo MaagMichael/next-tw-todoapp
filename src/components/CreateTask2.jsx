@@ -17,10 +17,12 @@ export default function CreateTask2() {
         cache: "no-store",
       })
 
-      if (response.ok) {
-        // Refresh the page or update the UI
-        window.location.reload();
+      if (!response.ok) {
+        throw new Error('Failed to create task');
       }
+
+      window.location.reload();
+      
     } catch (error) {
       console.error('Error adding task:', error)
     }
