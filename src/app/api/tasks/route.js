@@ -115,7 +115,6 @@ export async function PATCH(request) {
 
     // get user input
     const updatedtaskinput = await request.json();
-    console.log("data an", updatedtaskinput);
 
     // Map through tasks and update taskname for matching id
     const updatedTasks = existingTasks.map((task) => {

@@ -7,12 +7,13 @@ export default function BoxTask(item) {
   const [isChecked, setIsChecked] = useState(item.status);
   
   const handleCheckboxChange = async () => {
-    setIsChecked(!isChecked);
+    const newStatus = (!isChecked)
+    setIsChecked (newStatus);
     
     const data = {
       id: item.id, // Get id directly from item props
       taskname: item.taskname, // useState value
-      status: isChecked,
+      status: newStatus,
       datelastedit: new Date().toISOString(),
     };    
 
@@ -61,7 +62,7 @@ export default function BoxTask(item) {
           onChange={handleCheckboxChange}
           type="checkbox"
           className="mr-4"
-          value={isChecked}
+          checked={isChecked}
         />
         <h2 className={`${isChecked ? "line-through" : ""}`}>
           {item.taskname}
