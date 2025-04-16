@@ -107,6 +107,7 @@ export async function DELETE(request) {
 
 // ############################################### PATCH ###############################################
 
+// PATCH = partial update of data object, PUT = full update of data object
 export async function PATCH(request) {
   try {
     const fileData = await fs.readFile(filePath, "utf8");

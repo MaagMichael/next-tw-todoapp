@@ -18,7 +18,7 @@ export default function EditButton(item) {
     const data = {
       id: item.id,  // Get id directly from item props
       taskname: itemName, // useState value
-      status: item.status,
+      // status: item.status,
       datelastedit: new Date().toISOString(),
     };
 
